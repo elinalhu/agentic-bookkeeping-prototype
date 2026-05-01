@@ -49,6 +49,18 @@ but a CPA reviews the output at tax time. Two views, one underlying state:
 The owner sees plain language; the CPA can audit the full reasoning chain
 that produced it.
 
+**Scope honesty:** the owner view is where I spent the bulk of the design
+time. That was deliberate — the brief's central tension is the
+owner-resolving-ambiguity moment, so the queue, the card design, the
+clarifying-question shape, the rule selector, and the lead reasoning
+bullet all got real iteration. The CPA view is functionally complete
+(period header, decision metrics, audit trail, Inspect surface, rollback)
+but it hasn't had the same number of design passes. With more time the
+priorities for the CPA view would be: filter combinations that match how
+real bookkeeping triage actually flows, a sign-off ledger that's more
+than ceremonial, and a stale-rule surface tied to the silent-drift
+mitigation in the failure-modes section.
+
 ---
 
 ## Key product choices
@@ -187,11 +199,15 @@ into the audit log.
 ### Global persistent chat
 
 I had it planned originally — a sidebar assistant the owner could open to
-ask general questions. I cut it because the brief argued against it: a
-bookkeeping agent that responds to vague questions doesn't reduce
-cognitive load, it adds another surface to think about. The
-per-transaction chat I kept (on the detail page) is scoped to a single
-hypothesis — it has context, it has continuity, it can't go off-topic.
+ask general questions. I cut it for two reasons. First, the brief argued
+against it: a bookkeeping agent that responds to vague questions doesn't
+reduce cognitive load, it adds another surface to think about. Second,
+keeping the chat surface scoped to a transaction was a deliberate scope
+reduction — a global assistant would have meant designing prompt, memory,
+and grounding for a much broader interaction model than the take-home
+budget allowed. The per-transaction chat I kept (on the detail page) is
+scoped to a single hypothesis — it has context, it has continuity, and it
+can't go off-topic.
 
 ### Multi-agent orchestration
 
@@ -231,21 +247,24 @@ In rough priority order:
    transactions and a regression suite, prompt changes are scary. Even a
    small fixed set of 30–50 transactions with ground-truth accounts run
    on every prompt edit would catch most regressions.
-2. **Tool-using retrieval.** Replace the pre-built context window with
+2. **Inbox priority sort by `dollar_impact × (1 − confidence)`.** Right
+   now the inbox is just sorted by amount. A weighted priority would
+   surface the biggest "could be wrong" items at the top — high-dollar
+   transactions where the agent is uncertain — which is where owner
+   attention is most valuable. Cheap to ship, big improvement in
+   triage.
+3. **Tool-using retrieval.** Replace the pre-built context window with
    tools the agent calls dynamically: `searchPriorTransactions`,
    `lookupMerchantCategory`, `getBusinessProfile`. This handles the long
    tail (rare merchants, large history) and lets cost scale with what the
    agent actually needs to look at.
-3. **Batch re-categorization sweep.** When a new rule contradicts prior
+4. **Batch re-categorization sweep.** When a new rule contradicts prior
    decisions, surface them. "You just said all Stripe is Revenue, but
    these three older Stripe transactions were filed differently — review?"
-4. **Stale rule alerts.** Rules unconfirmed for >90 days flagged in the
+5. **Stale rule alerts.** Rules unconfirmed for >90 days flagged in the
    CPA view. Drift mitigation made explicit.
-5. **Cold-start onboarding wizard.** First-five categorizations as a
+6. **Cold-start onboarding wizard.** First-five categorizations as a
    guided flow rather than the same review surface.
-6. **Inbox priority sort by `dollar_impact × (1 − confidence)`.** Right
-   now the inbox is just sorted. A weighted priority would surface the
-   biggest "could be wrong" items at the top.
 
 ---
 
