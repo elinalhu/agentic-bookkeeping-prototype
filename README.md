@@ -14,6 +14,12 @@ review at month-end.
 > feature only because the design choice was to propose an *enhancement*
 > rather than a standalone app.
 
+![The agentic Tasks queue](docs/screenshots/tasks.png)
+
+*The Tasks queue: medium-confidence items surface for owner review at the
+top, high-confidence items batch-confirm at the bottom, and rules fire
+deterministically into Already actioned (off-screen).*
+
 ---
 
 ## The interesting parts are in the docs
