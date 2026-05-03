@@ -1,18 +1,15 @@
 # Agentic Bookkeeping Prototype
 
 An interactive prototype of an AI agent that helps small business owners
-resolve ambiguous bank-transaction categorizations. Originally built as a
-take-home exercise; published here as a portfolio project.
+resolve ambiguous bank-transaction categorizations. 
 
 The agent forms a confident hypothesis on every transaction, auto-files
 the high-confidence ones, surfaces only the genuinely ambiguous ones to
 the owner, and produces a full audit trail for the bookkeeping team to
 review at month-end.
 
-> **Note:** Built as a take-home for Pilot. I'm not affiliated with Pilot;
-> this code is mine. The product framing references Pilot's existing Tasks
-> feature only because the design choice was to propose an *enhancement*
-> rather than a standalone app.
+> **Note:** Built as a practice product prototyping exercise. This code is
+> mine and not affiliated with Pilot in any official capacity.
 
 ![The agentic Tasks queue](docs/screenshots/tasks.png)
 
